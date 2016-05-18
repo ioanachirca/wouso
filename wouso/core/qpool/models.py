@@ -1,3 +1,5 @@
+import json
+
 from random import shuffle
 from datetime import datetime, date, timedelta
 
@@ -11,6 +13,7 @@ from ckeditor.fields import RichTextField
 import json
 
 from wouso.core.common import Item
+
 
 
 class Category(Item, models.Model):
@@ -195,10 +198,11 @@ class Schedule(models.Model):
     def __unicode__(self):
         return str(self.day)
 
+
 class ProposedQuestion(models.Model):
     """ A proposed question has text and a variable number of answers
     (stored as strings),category and tags, proposing user and a feedback field
-    """ 
+    """
 
     text = models.TextField(null=True, blank=True, default="")
     proposed_by = models.ForeignKey(User, null=True, blank=True, related_name="%(app_label)s_%(class)s_proposedby_related")
@@ -210,34 +214,38 @@ class ProposedQuestion(models.Model):
     answers_json = models.TextField(null=True, blank=True, default="")
     feedback = models.TextField(null=True, blank=True, default="")
 
-    def toQuestion(self, answer_type):
-        #In progress
+    def toQuestion(self):
+        """ Create a Question object based on ProposedQuestion
+            object's fields and save it in database
+        """
 
         qdict = {}
-        qdict['text'] = text
-        qdict['answer_type'] = answerType()
-        qdict['proposed_by'] = proposed_by
-        qdict['category'] = category
+        qdict['text'] = self.text
+        qdict['answer_type'] = self.answerType
+        qdict['proposed_by'] = self.proposed_by
+        qdict['category'] = self.category
         q = Question(**qdict)
-        q.save()
+        q.save() # Before adding ManyToMany fields, objects need to be saved in database
 
-        """
-         # add the tags
-        for tag_name in form.cleaned_data['tags']:
-            tag = Tag.objects.filter(name=tag_name)[0]
+        # Add tags
+        for tag in self.tags.all():
             q.tags.add(tag)
             q.save()
-        """
 
-        # add the answers
-        answers_json = answers()
-        for answer in answers_json:
+
+        # Create the answers
+        for answer in self.answers:
             ans = Answer(question=q, **answer)
             ans.save()
 
-    def answerType(self):
 
-        answers_list = json.loads(self.answers_json)
+    @cached_property
+    def answerType(self):
+        """ Returns the answer type of the question
+        """
+
+        answers_list = self.answers
+        count = 0
         for answer in answers_list:
             if answer['correct']:
                 count += 1
@@ -248,4 +256,7 @@ class ProposedQuestion(models.Model):
 
     @cached_property
     def answers(self):
+        """ Returns a list of answers in json format
+        """
+
         return json.loads(self.answers_json)
