@@ -16,7 +16,8 @@ function reload_header() {
 
 function toggle_visibility(id) {
     $("#" + id).toggle("slow");
-};  
+};
+
 
 /*
 $(document).ready(function (){
