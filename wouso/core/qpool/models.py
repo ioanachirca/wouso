@@ -260,3 +260,10 @@ class ProposedQuestion(models.Model):
         """
 
         return json.loads(self.answers_json)
+
+    @cached_property
+    def feedback_json(self):
+        """ Returns a list of answers in json format
+        """
+
+        return json.loads(self.feedback)

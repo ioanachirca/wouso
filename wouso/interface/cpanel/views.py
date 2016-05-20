@@ -1446,10 +1446,13 @@ def accept_question(request,id):
         pq = ProposedQuestion.objects.get(id=id)
         feedback_text = str(request.POST['feedback'])
         feedback_dict.update({
-                            'text':feedback_text,
-                            'time': str(time.strftime("%d/%m/%Y")) + " " +  str(time.strftime("%H:%M:%S")),
+                            "text":feedback_text,
+                            "time": str(time.strftime("%d/%m/%Y")) + " " +  str(time.strftime("%H:%M:%S")),
                             })
-        pq.feedback = pq.feedback + ',' + str(feedback_dict)
+        if pq.feedback != "":
+            pq.feedback = pq.feedback + ',' + json.dumps(feedback_dict)
+        else:
+            pq.feedback = json.dumps(feedback_dict)
         pq.status = "A"
         pq.save()
         pq.toQuestion()
@@ -1469,10 +1472,13 @@ def decline_question(request,id):
         pq = ProposedQuestion.objects.get(id=id)
         feedback_text = str(request.POST['feedback'])
         feedback_dict.update({
-                            'text':feedback_text,
-                            'time': str(time.strftime("%d/%m/%Y")) + " " +  str(time.strftime("%H:%M:%S")),
+                            "text":feedback_text,
+                            "time": str(time.strftime("%d/%m/%Y")) + " " +  str(time.strftime("%H:%M:%S")),
                             })
-        pq.feedback = pq.feedback + ',' + str(feedback_dict)
+        if pq.feedback != "":
+            pq.feedback = pq.feedback + ',' + json.dumps(feedback_dict)
+        else:
+            pq.feedback = json.dumps(feedback_dict)
         pq.status = "D"
         pq.save()
         return HttpResponse("Question Declined")
