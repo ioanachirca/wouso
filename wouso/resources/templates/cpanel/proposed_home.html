@@ -14,9 +14,6 @@
   {% endblock %}
 
 {% endblock %}
-{% block bottomscripts %}
-    <script type="text/javascript" src="{{ basepath }}/static/js/cpanel/qpool/proposed_questions.js/"></script>
-{% endblock %}
 
 {% block sectioncontent %}
 
@@ -28,7 +25,7 @@
         {% endfor %}
     </ul>
 
-    <div class="tab-content">
+    <div class="tab-content"> 
       {% for category in categories %}
           <div id="{{ category.name }}" class="tab-pane fade {% if forloop.first %} in {% endif %}  active">
 

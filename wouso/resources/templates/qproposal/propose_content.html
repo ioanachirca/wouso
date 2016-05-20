@@ -59,7 +59,7 @@
                     <br/>
 
                     <label class="control-label col-sm-3" for="id_correct_1">Correct?</label>
-                    <input id="id_correct_1" name="correct_0" type="checkbox"></input>
+                    <input id="id_correct_1" name="correct_1" type="checkbox"></input>
                 </div>
                 <br/>
             </div>
@@ -149,15 +149,18 @@
                                 <tr>
                                     <th>Feedback</th>
                                 </tr>
-                                {% if q.feedback and q.feedback.strip %}
+                                {% if q.feedback_json.text and q.feedback_json.text.strip %}
                                     <tr>
-                                        <td>{{ q.feedback }}</td>
+                                        <td>
+                                                {{  q.feedback_json.text }}
+                                        </td>
                                     </tr>
                                 {% else %}
                                     <tr>
                                         <td>{% trans "No feedback yet." %}</td>
                                     </tr>
                                 {% endif %}
+                                
                             </table>
                         </td>
                     </tr>
