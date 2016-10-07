@@ -11,6 +11,10 @@ source sandbox/bin/activate
 pip install -r requirements-pip
 pip install -r requirements-extra
 
+# Install a compatible version of sqlparse
+pip uninstall sqlparse
+pip install sqlparse==0.1.19
+
 # Install Django Pyston
 curl 'https://pypi.python.org/packages/source/d/django-piston/django-piston-0.2.3.tar.gz' | tar xzf -
 cd django-piston-0.2.3; python setup.py install

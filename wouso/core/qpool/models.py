@@ -267,3 +267,9 @@ class ProposedQuestion(models.Model):
         """
 
         return json.loads(self.feedback)
+
+    def __str__(self):
+        """ Get a text (string) with a proposed question text.
+        """
+
+        return self.text
